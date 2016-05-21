@@ -6,7 +6,7 @@ Rojas.
 Code
 ----
 
-There are three functions/procedures in the main file "decompose.m".<br>
+There are three functions/procedures in the main file "decompose.mag".<br>
 * `GADecomposition(G,signature)`  Determines the decomposition of the Jacobian variety of curves with automorphism group G and given signature.<br>
 * `ICDecomposition(G,signature,order)`  Determines the decomposition of the Jacobian variety of all intermediate covers of curves with automorphism group G and given signature by a subgroup of given order.<br>
 * `PrettyPrint(decomposition)`  Prints the decompositions in a "human friendly" way.<br>
@@ -17,10 +17,10 @@ There are three functions/procedures in the main file "decompose.m".<br>
 Setup
 -----
 
-To run the code, first load the main file "decompose.m" into Magma. <br>
-`load "decompose.m";`
+To run the code, first load the main file "decompose.mag" into Magma. <br>
+`load "decompose.mag";`
 
-This will also load another file called "genvectors.m", so make sure the file "genvectors.m" is in the same folder on your computer.
+This will also load another file called "genvectors.mag", so make sure the file "genvectors.mag" is in the same folder on your computer.
 
 
 
@@ -86,7 +86,7 @@ SmallGroup(324,69) with signature [0;2,6,18].
 This is a list of two elements, representing each of two decompositions. For each decomposition, the individual
 factors (from (2) in the paper)  are coded as three numbers.  The first number is the dimension of the variety Bi, the second number is the exponent ni, the third number is which characters provide this factor (again, see the Warnings below).
 
-You may wonder why, for a given group and signature, the code outputs more than one decomposition sometimes.  This is because the code used to deteremine the generating vectors (in the file `genvectors.m`) is  
+You may wonder why, for a given group and signature, the code outputs more than one decomposition sometimes.  This is because the code used to deteremine the generating vectors (in the file `genvectors.mag`) is  
 
 Warnings
 --------
@@ -94,7 +94,7 @@ Warnings
 The program will return an error if a group not represented as a permutation group is entered as input and if the
 internal code cannot convert the group to a permutation group. The user will be prompted  to enter it as a permutation group. 
 
-All subgroups and conjugacy classes are labeled as Magma labels them for the permutation group (either as entered by the user or as computed from the function `ConvertToPerm` which is in the file `genvectors.m`).
+All subgroups and conjugacy classes are labeled as Magma labels them for the permutation group (either as entered by the user or as computed from the function `ConvertToPerm` which is in the file `genvectors.mag`).
 
 
 
