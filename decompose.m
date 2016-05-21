@@ -1,0 +1,218 @@
+/* *********************************************************** 
+
+decompose.m
+This program deterine the decomposition of Jacobian
+  varieties given a group and signature. 
+
+
+Copyright (C) 2016 by Jennifer Paulhus and Anita M. Rojas
+    
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+This code is supplement for the paper:
+"Completely decomposable Jacobian varieties in new genera"
+by Paulhus and Rojas. 
+
+Questions or comment about the code may be directed to:
+paulhus@math.grinnell.edu 
+
+************************************************************ */
+
+
+load "genvectors.m";
+     /* contains functions to determine generating vectors */
+SetColumns(0);
+ZZ:=Integers();
+
+
+
+/* *********************************
+Procedure PrettyPrint
+
+  Input:  decomposition information                    
+               
+  Output:  prints decompositions in 
+           human readable form
+ ********************************* */
+
+PrettyPrint:=procedure(Decomps)
+
+   if #Decomps eq 0 then
+      print "ERROR: It appears this group and signature are not legitimate values for any Riemann Surface.";
+   else
+      fulllist:=[];
+      for dec in Decomps do
+         prtstring:="";
+         for i in [1..#dec-1] do
+        
+            ell:=dec[i];
+            if ell[1] eq 1 then
+               prtstring:=prtstring cat "E";
+            else   
+               prtstring:=prtstring cat "A_" cat IntegerToString(ZZ!ell[1]);
+            end if;   
+            if ell[2] gt 1 then
+               prtstring:=prtstring cat "^" cat IntegerToString(ZZ!ell[2]);
+            end if;
+            prtstring:=prtstring cat " x ";
+         end for;
+         ell:=dec[#dec];
+         if ell[1] eq 1 then
+            prtstring:=prtstring cat "E";
+         else
+            prtstring:=prtstring cat "A_" cat IntegerToString(ZZ!ell[1]);
+         end if;
+         if ell[2] gt 1 then
+            prtstring:=prtstring cat "^" cat IntegerToString(ZZ!ell[2]);
+         end if;
+         print prtstring;
+      end for;   
+   end if;
+end procedure;
+
+
+
+/* ********************************** 
+  Function  GADecomposition                   
+  Input:    group G                    
+            signature sign  
+               
+   Output:  decompositions for Riemann
+            surfaces with automorphism
+	    group G and signature sign
+ ************************************ */
+
+GADecomposition:=function(H, sign)
+
+   if CanIdentifyGroup(Order(H)) then
+      H:=SmallGroup(IdentifyGroup(H)[1],IdentifyGroup(H)[2]);
+   end if;
+      
+   G:=ConvertToPerm(H);  /* convert to permutation group  */
+   if Type(G) ne GrpPerm then
+      return "ERROR: Please enter your group in the form SmallGroup(n,k) or as a permutation group.";
+   end if;
+
+   R:=RepresentativesEpimorphisms(sign,G); /* in genvectors.m, gets generating vector(s) */
+
+   if #R eq 0 then
+      return [[]];   
+   else 
+      chilist:=[];
+
+      for i in [1..#R] do
+         T:=[*CharacterTable(G),CharacterTable(sub<G|Id(G)>)*];
+         monod:=R[i]`genimages;
+          
+         for j in [1..#monod] do;
+            Append(~T,CharacterTable(sub<G|G!monod[j]>));
+         end for;  
+          
+ /* compute Hurwitz character  */
+         chi:=2*T[1,1]+(#sign-3+2*sign[1])*Induction(T[2,1],G); 
+         for k in [3..#T]  do;
+   	    chi:=chi-Induction(T[k,1],G);
+         end for;
+    
+ /* reduces redundancies */
+         if chi notin chilist then   
+            Append(~chilist,chi);  
+         end if;
+    
+      end for;
+
+
+ /* Create Q-irreducibles,  L list of which orbit was taken */
+      QirrTbl:=[];
+      SchurValues:=[];
+      L:=[]; /* which characters contribute to decomposition */
+      for i in [1..#T[1]] do
+         m:=SchurIndex(T[1,i]);            
+         gsum:= &+(GaloisOrbit(T[1,i]));  /*Sums Orbits */
+         if gsum notin QirrTbl then 
+            Append(~L,i);     
+            Append(~QirrTbl, gsum);
+            Append(~SchurValues,m);
+      	 end if;
+      end for;
+
+      totallist:=[ ];  /* list of all decompositions */
+      for chi in chilist do 
+         decomplist:=[];     /* will contain entries with decomp info */
+         for j in [1..#QirrTbl] do 
+            InPr:=InnerProduct(QirrTbl[j],chi);
+            if InPr ne 0 then  
+               Append(~decomplist, [* SchurValues[j]*(InPr/2),T[1,L[j],1]/SchurValues[j], L[j]*] );                  
+            end if;   
+	 end for;
+         Append(~totallist, decomplist);     
+      end for;
+   end if;
+   return totallist;
+ 
+end function;
+
+
+
+
+/* *********************************************** 
+  Function  ICDecomposition
+  Input:     group G                    
+             signature sign
+             subgroup order ord
+               
+   Output:   decompositions for intermediate covers
+             of Riemann Surfaces with group G and 
+	     signature sign by subgroups of order ord
+ *********************************************** */
+
+ICDecomposition:=function(K, sign, ord)
+
+   if CanIdentifyGroup(Order(K)) then
+      K:=SmallGroup(IdentifyGroup(K)[1],IdentifyGroup(K)[2]);
+   end if;
+      
+   G:=ConvertToPerm(K);  /* convert to permutation group  */
+   if Type(G) ne GrpPerm then
+      return "ERROR: Please enter your group in the form SmallGroup(n,k) or as a permutation group.";
+   end if;
+   T:=CharacterTable(G);
+   
+   D:=GADecomposition(G,sign);
+
+   S:=Subgroups(G); /* create subgroups of that order */
+   SubList:=[j : j in [1..#S] | Order(S[j]`subgroup) eq ord];
+
+   for dec in D do 
+      decomppergp:=[];
+      for k in [1..#SubList] do
+         H:=S[k]`subgroup;
+         quodecomp:=[];
+         /* Compute the degrees in the quotient decomposition */
+         deg:=[InnerProduct(PermutationCharacter(G,H),x):x in T];
+         schm:=[SchurIndex(x): x in T];
+         quodecomp:=[];
+         for fctr in dec do
+            val:=fctr[3];  
+            if deg[val] ne 0 then   
+               Append(~quodecomp, [* fctr[1],deg[val]/schm[val],val*] );
+            end if; 
+         end for;
+      Append(~decomppergp,quodecomp);   
+      end for;
+      
+   end for;
+   return decomppergp,SubList;
+
+end function;
