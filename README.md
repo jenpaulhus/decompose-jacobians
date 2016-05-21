@@ -6,7 +6,7 @@ Rojas.
 Code
 ----
 
-There are three functions/procedures in this file.<br>
+There are three functions/procedures in the main file "decompose.m".<br>
 * `GADecomposition(G,signature)`  Determines the decomposition of the Jacobian variety of curves with automorphism group G and given signature.<br>
 * `ICDecomposition(G,signature,order)`  Determines the decomposition of the Jacobian variety of all intermediate covers of curves with automorphism group G and given signature by a subgroup of given order.<br>
 * `PrettyPrint(decomposition)`  Prints the decompositions in a "human friendly" way.<br>
