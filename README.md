@@ -98,6 +98,7 @@ All subgroups and conjugacy classes are labeled as Magma labels them for the per
 
 An error will also be returned if the specific group and signature pair entered are not possible pairs for a Riemann Surface.
 
+Finally, an error will be returned if the function `ICDecomposition(G,sign,order)` is called but the order is not a viable order for a subgroup of the group G. 
 
 
 
