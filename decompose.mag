@@ -193,28 +193,37 @@ ICDecomposition:=function(K, sign, ord)
    
    D:=GADecomposition(G,sign);
 
-   S:=Subgroups(G); /* create subgroups of that order */
-   SubList:=[j : j in [1..#S] | Order(S[j]`subgroup) eq ord];
+   if  Type(D) eq MonStgElt  then  /* deals with error messages */
+      return D;
+   else   
 
-   for dec in D do 
-      decomppergp:=[];
-      for k in [1..#SubList] do
-         H:=S[k]`subgroup;
-         quodecomp:=[];
-         /* Compute the degrees in the quotient decomposition */
-         deg:=[InnerProduct(PermutationCharacter(G,H),x):x in T];
-         schm:=[SchurIndex(x): x in T];
-         quodecomp:=[];
-         for fctr in dec do
-            val:=fctr[3];  
-            if deg[val] ne 0 then   
-               Append(~quodecomp, [* fctr[1],deg[val]/schm[val],val*] );
-            end if; 
-         end for;
-      Append(~decomppergp,quodecomp);   
-      end for;
+      S:=Subgroups(G); /* create subgroups of that order */
+      SubList:=[j : j in [1..#S] | Order(S[j]`subgroup) eq ord];
+
+      if #SubList eq 0 then
+         return "ERROR: There are no subgroups of order " cat IntegerToString(ord) cat " for this group.";
+      else
+         for dec in D do 
+            decomppergp:=[];
+            for k in [1..#SubList] do
+               H:=S[k]`subgroup;
+               quodecomp:=[];
+               /* Compute the degrees in the quotient decomposition */
+               deg:=[InnerProduct(PermutationCharacter(G,H),x):x in T];
+               schm:=[SchurIndex(x): x in T];
+               quodecomp:=[];
+               for fctr in dec do
+                  val:=fctr[3];  
+                  if deg[val] ne 0 then   
+                     Append(~quodecomp, [* fctr[1],deg[val]/schm[val],val*] );
+                  end if; 
+               end for;
+            Append(~decomppergp,quodecomp);   
+            end for;
       
-   end for;
-   return decomppergp,SubList;
+         end for;
+         return decomppergp,SubList;
+      end if;	 
+   end if;
 
 end function;
