@@ -96,6 +96,8 @@ internal code cannot convert the group to a permutation group. The user will be 
 
 All subgroups and conjugacy classes are labeled as Magma labels them for the permutation group (either as entered by the user or as computed from the function `ConvertToPerm` which is in the file `genvectors.mag`).
 
+An error will also be returned if the specific group and signature pair entered are not possible pairs for a Riemann Surface.
+
 
 
 
