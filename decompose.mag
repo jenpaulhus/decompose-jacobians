@@ -1,6 +1,6 @@
 /* *********************************************************** 
 
-decompose.m
+decompose.mag
 This program deterine the decomposition of Jacobian
   varieties given a group and signature. 
 
@@ -30,7 +30,7 @@ paulhus@math.grinnell.edu
 ************************************************************ */
 
 
-load "genvectors.m";
+load "genvectors.mag";
      /* contains functions to determine generating vectors */
 SetColumns(0);
 ZZ:=Integers();
@@ -48,13 +48,14 @@ Procedure PrettyPrint
 
 PrettyPrint:=procedure(Decomps)
 
-   if #Decomps eq 0 then
-      print "ERROR: It appears this group and signature are not legitimate values for any Riemann Surface.";
-   else
+   if  Type(Decomps) eq MonStgElt  then  /* deals with error messages */
+      print Decomps;
+   else   
+
       fulllist:=[];
       for dec in Decomps do
          prtstring:="";
-         for i in [1..#dec-1] do
+     	 for i in [1..#dec-1] do
         
             ell:=dec[i];
             if ell[1] eq 1 then
@@ -77,8 +78,9 @@ PrettyPrint:=procedure(Decomps)
             prtstring:=prtstring cat "^" cat IntegerToString(ZZ!ell[2]);
          end if;
          print prtstring;
-      end for;   
+      end for;
    end if;
+   
 end procedure;
 
 
@@ -107,7 +109,7 @@ GADecomposition:=function(H, sign)
    R:=RepresentativesEpimorphisms(sign,G); /* in genvectors.m, gets generating vector(s) */
 
    if #R eq 0 then
-      return [[]];   
+      return "ERROR: It appears this group and signature are not legitimate values for any Riemann Surface.";   
    else 
       chilist:=[];
 
