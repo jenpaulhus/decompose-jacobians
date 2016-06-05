@@ -340,7 +340,6 @@ while tup ne [id,id] do
    end for;
 
    
-/* MODIFY HERE TO PRINT WHEN ALLGEN TRUE */
 
    if g0 eq 0 then
       if prod eq  id and #sub<G | tup >  eq  n then
@@ -352,7 +351,7 @@ while tup ne [id,id] do
          end for;
 
         Append(~genvecs, hypgens);
-             /* 12/7/15 testing*/
+         
           
       end if;
       
@@ -376,7 +375,7 @@ while tup ne [id,id] do
       end for;
 
       Append(~genvecs, hypgens);
-          /* 12/7/15 testing*/
+        
 
 
 
@@ -394,8 +393,6 @@ while tup ne [id,id] do
       end for;
 
         Append(~genvecs, hypgens);
-            /* 12/7/15 testing*/
-
 
 
           
@@ -430,7 +427,6 @@ while tup ne [id,id] do
             end for;
             
                                                               
-/* HERE NEW */           
             if commprod*prod eq id then
     
                
@@ -451,7 +447,6 @@ while tup ne [id,id] do
                      end for;  
                      
              Append(~genvecs, tempelms);
-             /* 12/7/15 testing*/
 
                end if; 
             end if;
@@ -529,8 +524,7 @@ if Type(G) ne GrpPerm then
   end if;  
 end if;
 
-           
-
+          
 ccl:= ConjugacyClasses( G );
 nccl:= #ccl;
 orders:= [];
