@@ -20,7 +20,8 @@ Setup
 To run the code, first load the main file "decompose.mag" into Magma. <br>
 `load "decompose.mag";`
 
-This will also load another file called "genvectors.mag", so make sure the file "genvectors.mag" is in the same folder on your computer.
+This will also load another file called "genvectors.mag", so make sure the file "genvectors.mag" is in the same folder on your computer. This file may be found at:
+https://github.com/jenpaulhus/breuer-modified/blob/master/genvectors.mag
 
 
 
