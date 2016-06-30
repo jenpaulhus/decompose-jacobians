@@ -1,4 +1,4 @@
-# decompose-jacobians
+# Magma code to determine Jacobian variety decompositions
 
 These files contain code used for the paper *"Completely decomposable Jacobian varieties in new genera"*  by Paulhus and
 Rojas.
