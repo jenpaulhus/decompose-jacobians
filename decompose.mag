@@ -115,7 +115,7 @@ GADecomposition:=function(H, sign)
 
       for i in [1..#R] do
          T:=[*CharacterTable(G),CharacterTable(sub<G|Id(G)>)*];
-         monod:=R[i]`genimages;
+         monod:=[R[i]`genimages[j]: j in [2*sign[1]+1..2*sign[1]+#sign-1]];
           
          for j in [1..#monod] do;
             Append(~T,CharacterTable(sub<G|G!monod[j]>));
@@ -205,7 +205,7 @@ ICDecomposition:=function(K, sign, ord)
       else
          for dec in D do 
             decomppergp:=[];
-            for k in [1..#SubList] do
+            for k in SubList do
                H:=S[k]`subgroup;
                quodecomp:=[];
                /* Compute the degrees in the quotient decomposition */
