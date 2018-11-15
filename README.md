@@ -87,7 +87,7 @@ SmallGroup(324,69) with signature [0;2,6,18].
 This is a list of two elements, representing each of two decompositions. For each decomposition, the individual
 factors (from (2) in the paper)  are coded as three numbers.  The first number is the dimension of the variety Bi, the second number is the exponent ni, the third number is which characters provide this factor (again, see the Warnings below).
 
-You may wonder why, for a given group and signature, the code outputs more than one decomposition sometimes.  This is because the code used to deteremine the generating vectors (in the file `genvectors.mag`) is  
+You may wonder why, for a given group and signature, the code outputs more than one decomposition sometimes.  This is because the code used to deteremine the generating vectors (in the file `genvectors.mag`) outputs a generating vector for each action up to simultaneous conjugation, and non equivalent generating vectors may very well give different decompositions of the corresponding Jacobian variety.
 
 Warnings
 --------
